@@ -1,0 +1,64 @@
+version: '3.8'
+
+networks:
+  scrapenet:
+
+
+secrets:
+  postgres-password:
+    file: ./secrets/postgres-password
+  sftp_host:
+    file: ./secrets/sftp_host
+  sftp_user:
+    file: ./secrets/sftp_user
+  sftp_password:
+    file: ./secrets/sftp_password
+  smtp_host:
+    file: ./secrets/smtp_host
+  smtp_user:
+    file: ./secrets/smtp_user
+  smtp_password:
+    file: ./secrets/smtp_password
+  smtp_message:
+    file: ./secrets/smtp_message
+
+services:
+  app:
+    image: 192.168.4.6:5000/coffeescraper
+    networks:
+      - scrapenet
+    secrets:
+      - postgres-password
+      - sftp_host
+      - sftp_user
+      - sftp_password
+      - smtp_host
+      - smtp_user
+      - smtp_password
+      - smtp_message
+    environment:
+      - EXCELREPORT=/coffeescraper.xlsx # this is the default name of the remote file
+      - HTMLREPORT=/coffeescraper.html # this is the default name of the remote file
+      - ALERTLIMIT=0.50 # this is the default limit
+      - ALERTSENDER=someone@example.org # change this to a valid email address
+      - ALERTRECIPIENT=someone@example.org,someoneelse@example.org # a comma separated list of recipients
+      - ALERTSUBJECT="Coffee Alert # this is the default mail subject
+      # - DRYRUN=1                       # setting DRYRUN will prevent upload and mail
+    depends_on:
+      - db
+  db:
+    image: postgres:10
+    restart: unless-stopped
+    volumes:
+      - scrape-data:/var/lib/postgresql/data
+    networks:
+      - scrapenet
+    secrets:
+      - postgres-password
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: scrapedb
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres-password
+
+volumes:
+  scrape-data:

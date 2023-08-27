@@ -1,0 +1,6 @@
+requests
+selenium
+psycopg2
+openpyxl
+paramiko
+jinja2
