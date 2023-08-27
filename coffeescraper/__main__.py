@@ -20,15 +20,21 @@ from .utils import get_env, get_secret_file
 if __name__ == "__main__":
     filename = "/tmp/coffeescraper.xlsx"
     filename_html = "/tmp/coffeescraper.html"
+
+    lowest_price_today = 1000000.0
+    cheapest_site = None
     for site in sites:
         result = site()
         print(result)
         insert_tuple_into_table(*result)
+        if result[1] < lowest_price_today:
+            lowest_price_today = result[1]
+            cheapest_site = result[0]
 
     write_sheet(get_prices(), filename=filename)
     print(f"spreadsheet saved as {filename}")
 
-    generate_graph_html(get_prices(), filename=filename_html)
+    generate_graph_html(get_prices(), cheapest_site=cheapest_site, lowest_price_today=lowest_price_today, filename=filename_html)
     print(f"html graph saved as {filename_html}")
 
     upload_file_via_sftp(

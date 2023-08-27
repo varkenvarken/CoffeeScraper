@@ -13,7 +13,7 @@ class DateTimeEncoder(json.JSONEncoder):
             return super().default(z)
 
 
-def generate_graph_html(data_tuples, filename="/tmp/graph.html"):
+def generate_graph_html(data_tuples, cheapest_site="unkown", lowest_price_today="unknown", filename="/tmp/graph.html"):
     # Organize data by key for the graph
     data_by_key = {}
     labels = set()
@@ -31,6 +31,9 @@ def generate_graph_html(data_tuples, filename="/tmp/graph.html"):
         labels.add(timestamp)
     labels = sorted(labels)
 
+    if type(lowest_price_today) == float:
+        lowest_price_today = f"{lowest_price_today:.2f}"
+        
     # Create a Jinja2 template
     template_str = """
     <!DOCTYPE html>
@@ -45,13 +48,25 @@ def generate_graph_html(data_tuples, filename="/tmp/graph.html"):
         integrity="sha256-xlxh4PaMDyZ72hWQ7f/37oYI0E2PrBbtzi1yhvnG+/E=" crossorigin="anonymous"></script>
     </head>
     <body>
+        <style>
+        .site {
+            background-color: #eeeeee;
+            width: 40em;
+            list-style: none;
+            margin-top: 3px;
+        }
+        .lowest {
+            font-weight: bold;
+        }
+        </style>
         <h2>Prijzen Dolce Gusto Lungo XL (30 cups)</h2>
         <p>We houden op dit moment de volgende sites in de gaten:</p>
         <ul>
         {% for key in data_by_key.keys() %}
-        <li><a href="{{key}}">{{key}}</a></li>
+        <li class="site"><a href="{{key}}">{{key}}</a></li>
         {% endfor %}
         </ul><br>
+        <p>De laagste prijs op dit moment is <span class="lowest">{{lowest_price_today}} €</span> bij <a href="{{cheapest_site}}">{{cheapest_site}}</a></p>
         <canvas id="myChart"></canvas>
         <script>
             $(document).ready(function() {
@@ -73,17 +88,26 @@ def generate_graph_html(data_tuples, filename="/tmp/graph.html"):
                         datasets: datasets
                     },
                     options: {
-                        scales: {
-                            x: {
-                                type: 'time',
-                                time: {
-                                    unit: 'day'
-                                }
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                text: 'prijs in €',
+                                display: true
                             },
-                            y: {
-                                beginAtZero: true
+                            ticks: {
+                                callback: (val) => {
+                                    return val.toFixed(2);
+                                }
                             }
                         }
+                    }
                     }
                 });
             });
@@ -95,6 +119,8 @@ def generate_graph_html(data_tuples, filename="/tmp/graph.html"):
     html_content = template.render(
         data_by_key=data_by_key,
         labels=labels,
+        cheapest_site=cheapest_site,
+        lowest_price_today=lowest_price_today,
         json=lambda x: json.dumps(x, cls=DateTimeEncoder),
     )
     with open(filename, "w") as f:

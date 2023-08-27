@@ -1,0 +1,130 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Graph Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"
+        integrity="sha256-+8RZJua0aEWg+QVVKg4LEzEEm/8RFez5Tb4JBNiV5xA=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"
+        integrity="sha256-xlxh4PaMDyZ72hWQ7f/37oYI0E2PrBbtzi1yhvnG+/E=" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <style>
+        .site {
+            background-color: #eeeeee;
+            width: 40em;
+            list-style: none;
+            margin-top: 3px;
+        }
+        .lowest {
+            font-weight: bold;
+        }
+        </style>
+        <h2>Prijzen Dolce Gusto Lungo XL (30 cups)</h2>
+        <p>We houden op dit moment de volgende sites in de gaten:</p>
+        <ul>
+        
+        <li class="site"><a href="https://www.koffiehenk.nl/dolce-gusto-lungo-xl">https://www.koffiehenk.nl/dolce-gusto-lungo-xl</a></li>
+        
+        <li class="site"><a href="https://www.coffeepoddeals.com/capsules-dolce-gusto-lungo-xl">https://www.coffeepoddeals.com/capsules-dolce-gusto-lungo-xl</a></li>
+        
+        <li class="site"><a href="https://www.deprijshamer.nl/koffie/cups/dolce-gusto-lungo-xl">https://www.deprijshamer.nl/koffie/cups/dolce-gusto-lungo-xl</a></li>
+        
+        <li class="site"><a href="https://www.dolce-gusto.nl/koffiesmaken/lungo-xl">https://www.dolce-gusto.nl/koffiesmaken/lungo-xl</a></li>
+        
+        <li class="site"><a href="https://www.koffievoordeel.nl/dolce-gusto-capsules-cafe-lungo-xl">https://www.koffievoordeel.nl/dolce-gusto-capsules-cafe-lungo-xl</a></li>
+        
+        <li class="site"><a href="https://www.jumbo.com/producten/nescafe-dolce-gusto-lungo-capsules-30-koffiecups-352850DS">https://www.jumbo.com/producten/nescafe-dolce-gusto-lungo-capsules-30-koffiecups-352850DS</a></li>
+        
+        </ul><br>
+        <p>De laagste prijs op dit moment is <span class="lowest">7.79 €</span> bij <a href="https://www.coffeepoddeals.com/capsules-dolce-gusto-lungo-xl">https://www.coffeepoddeals.com/capsules-dolce-gusto-lungo-xl</a></p>
+        <canvas id="myChart"></canvas>
+        <script>
+            $(document).ready(function() {
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var datasets = [];
+                
+                    datasets.push({
+                        label: 'https://www.koffiehenk.nl/dolce-gusto-lungo-xl',
+                        data: [{"x": "2023-08-27T13:20:43.745932", "y": 7.99}, {"x": "2023-08-27T13:24:57.250816", "y": 7.99}, {"x": "2023-08-27T13:25:38.369415", "y": 7.99}, {"x": "2023-08-27T13:27:56.788673", "y": 7.99}, {"x": "2023-08-27T13:28:57.194294", "y": 7.99}, {"x": "2023-08-27T13:38:03.403514", "y": 7.99}, {"x": "2023-08-27T14:02:50.312588", "y": 7.99}, {"x": "2023-08-27T14:16:51.288735", "y": 7.99}, {"x": "2023-08-27T14:17:28.784743", "y": 7.99}, {"x": "2023-08-27T14:21:00.233492", "y": 7.99}],
+                        borderColor: '#ff0000',
+                        backgroundColor: 'rgba(0, 0, 0, 0)',  // Transparent background
+                        borderWidth: 2
+                    });
+                
+                    datasets.push({
+                        label: 'https://www.coffeepoddeals.com/capsules-dolce-gusto-lungo-xl',
+                        data: [{"x": "2023-08-27T13:20:44.134038", "y": 7.79}, {"x": "2023-08-27T13:24:57.605232", "y": 7.79}, {"x": "2023-08-27T13:25:38.777784", "y": 7.79}, {"x": "2023-08-27T13:27:57.793230", "y": 7.79}, {"x": "2023-08-27T13:28:57.627390", "y": 7.79}, {"x": "2023-08-27T13:38:04.751959", "y": 7.79}, {"x": "2023-08-27T14:02:50.652974", "y": 7.79}, {"x": "2023-08-27T14:17:29.308891", "y": 7.79}, {"x": "2023-08-27T14:21:00.673414", "y": 7.79}],
+                        borderColor: '#00ff00',
+                        backgroundColor: 'rgba(0, 0, 0, 0)',  // Transparent background
+                        borderWidth: 2
+                    });
+                
+                    datasets.push({
+                        label: 'https://www.deprijshamer.nl/koffie/cups/dolce-gusto-lungo-xl',
+                        data: [{"x": "2023-08-27T13:20:44.763297", "y": 7.99}, {"x": "2023-08-27T13:24:58.227968", "y": 7.99}, {"x": "2023-08-27T13:25:39.420024", "y": 7.99}, {"x": "2023-08-27T13:27:58.434197", "y": 7.99}, {"x": "2023-08-27T13:28:58.295493", "y": 7.99}, {"x": "2023-08-27T13:38:05.416967", "y": 7.99}, {"x": "2023-08-27T14:02:51.399801", "y": 7.99}, {"x": "2023-08-27T14:17:29.989833", "y": 7.99}, {"x": "2023-08-27T14:21:01.326289", "y": 7.99}],
+                        borderColor: '#0000ff',
+                        backgroundColor: 'rgba(0, 0, 0, 0)',  // Transparent background
+                        borderWidth: 2
+                    });
+                
+                    datasets.push({
+                        label: 'https://www.dolce-gusto.nl/koffiesmaken/lungo-xl',
+                        data: [{"x": "2023-08-27T13:20:48.638621", "y": 9.99}, {"x": "2023-08-27T13:24:58.656918", "y": 9.99}, {"x": "2023-08-27T13:25:39.589396", "y": 9.99}, {"x": "2023-08-27T13:27:58.689361", "y": 9.99}, {"x": "2023-08-27T13:28:58.431749", "y": 9.99}, {"x": "2023-08-27T13:38:05.949145", "y": 9.99}, {"x": "2023-08-27T14:02:58.221902", "y": 9.99}, {"x": "2023-08-27T14:17:30.127427", "y": 9.99}, {"x": "2023-08-27T14:21:01.465749", "y": 9.99}],
+                        borderColor: '#aaaa00',
+                        backgroundColor: 'rgba(0, 0, 0, 0)',  // Transparent background
+                        borderWidth: 2
+                    });
+                
+                    datasets.push({
+                        label: 'https://www.koffievoordeel.nl/dolce-gusto-capsules-cafe-lungo-xl',
+                        data: [{"x": "2023-08-27T13:20:48.697594", "y": 10.89}, {"x": "2023-08-27T13:24:58.721394", "y": 10.89}, {"x": "2023-08-27T13:25:39.642109", "y": 10.89}, {"x": "2023-08-27T13:27:58.750071", "y": 10.89}, {"x": "2023-08-27T13:28:58.483493", "y": 10.89}, {"x": "2023-08-27T13:38:06.003000", "y": 10.89}, {"x": "2023-08-27T14:02:58.293768", "y": 10.89}, {"x": "2023-08-27T14:17:30.182837", "y": 10.89}, {"x": "2023-08-27T14:21:01.564506", "y": 10.89}],
+                        borderColor: '#00aaaa',
+                        backgroundColor: 'rgba(0, 0, 0, 0)',  // Transparent background
+                        borderWidth: 2
+                    });
+                
+                    datasets.push({
+                        label: 'https://www.jumbo.com/producten/nescafe-dolce-gusto-lungo-capsules-30-koffiecups-352850DS',
+                        data: [{"x": "2023-08-27T13:20:57.364866", "y": 9.23}, {"x": "2023-08-27T13:25:00.463073", "y": 9.23}, {"x": "2023-08-27T13:25:41.333882", "y": 9.23}, {"x": "2023-08-27T13:28:00.406512", "y": 9.23}, {"x": "2023-08-27T13:29:00.382638", "y": 9.23}, {"x": "2023-08-27T13:38:07.964314", "y": 9.23}, {"x": "2023-08-27T14:03:00.547981", "y": 9.23}, {"x": "2023-08-27T14:17:33.922079", "y": 9.23}, {"x": "2023-08-27T14:21:03.834798", "y": 9.23}],
+                        borderColor: '#aa00aa',
+                        backgroundColor: 'rgba(0, 0, 0, 0)',  // Transparent background
+                        borderWidth: 2
+                    });
+                
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ["2023-08-27T13:20:43.745932", "2023-08-27T13:20:44.134038", "2023-08-27T13:20:44.763297", "2023-08-27T13:20:48.638621", "2023-08-27T13:20:48.697594", "2023-08-27T13:20:57.364866", "2023-08-27T13:24:57.250816", "2023-08-27T13:24:57.605232", "2023-08-27T13:24:58.227968", "2023-08-27T13:24:58.656918", "2023-08-27T13:24:58.721394", "2023-08-27T13:25:00.463073", "2023-08-27T13:25:38.369415", "2023-08-27T13:25:38.777784", "2023-08-27T13:25:39.420024", "2023-08-27T13:25:39.589396", "2023-08-27T13:25:39.642109", "2023-08-27T13:25:41.333882", "2023-08-27T13:27:56.788673", "2023-08-27T13:27:57.793230", "2023-08-27T13:27:58.434197", "2023-08-27T13:27:58.689361", "2023-08-27T13:27:58.750071", "2023-08-27T13:28:00.406512", "2023-08-27T13:28:57.194294", "2023-08-27T13:28:57.627390", "2023-08-27T13:28:58.295493", "2023-08-27T13:28:58.431749", "2023-08-27T13:28:58.483493", "2023-08-27T13:29:00.382638", "2023-08-27T13:38:03.403514", "2023-08-27T13:38:04.751959", "2023-08-27T13:38:05.416967", "2023-08-27T13:38:05.949145", "2023-08-27T13:38:06.003000", "2023-08-27T13:38:07.964314", "2023-08-27T14:02:50.312588", "2023-08-27T14:02:50.652974", "2023-08-27T14:02:51.399801", "2023-08-27T14:02:58.221902", "2023-08-27T14:02:58.293768", "2023-08-27T14:03:00.547981", "2023-08-27T14:16:51.288735", "2023-08-27T14:17:28.784743", "2023-08-27T14:17:29.308891", "2023-08-27T14:17:29.989833", "2023-08-27T14:17:30.127427", "2023-08-27T14:17:30.182837", "2023-08-27T14:17:33.922079", "2023-08-27T14:21:00.233492", "2023-08-27T14:21:00.673414", "2023-08-27T14:21:01.326289", "2023-08-27T14:21:01.465749", "2023-08-27T14:21:01.564506", "2023-08-27T14:21:03.834798"],
+                        datasets: datasets
+                    },
+                    options: {
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                text: 'prijs in €',
+                                display: true
+                            },
+                            ticks: {
+                                callback: (val) => {
+                                    return val.toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                    }
+                });
+            });
+        </script>
+    </body>
+    </html>
+    
