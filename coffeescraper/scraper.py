@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import logging
 from typing import Tuple
 from collections import namedtuple
 import requests
@@ -80,8 +81,11 @@ class CoffeeScraper:
             PriceNotFoundException: If no price is found in the scraped content.
         """
         response = requests.get(self.url, headers=self.headers)
+        logging.debug(f"{self.url} {response.status_code}:{response.reason}")
         if match := re.search(self.pricepattern, response.text):
-            return self.url, float(self.format(match.group("price")))
+            price = float(self.format(match.group("price")))
+            logging.info(f"price from {self.url} = {price}")
+            return self.url, price
         raise PriceNotFoundException(f"No price found in {self.url}")
 
 
@@ -148,9 +152,12 @@ class ChromiumCoffeeScraper(CoffeeScraper):
         driver.get(self.url)
 
         try:
-            price = driver.find_element(by=By.CLASS_NAME, value="current-price")
-            price = self.url, self.format(price.text)
+            price = driver.find_element(self.pricepattern.by, self.pricepattern.value)
+            formattedprice = self.format(price.text)
+            price = self.url, formattedprice
+            logging.info(f"price from {self.url} = {formattedprice}")
         except:
+            logging.warning(f"{self.url} no elemement with {self.pricepattern.by} = {self.pricepattern.value} found")
             price = None
 
         driver.close()

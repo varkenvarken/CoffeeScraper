@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import logging
 from datetime import datetime
 from jinja2 import Template
 import json
@@ -20,7 +21,6 @@ def generate_graph_html(data_tuples, cheapest_site="unkown", lowest_price_today=
     colors = ["#ff0000", "#00ff00", "#0000ff", "#aaaa00", "#00aaaa", "#aa00aa"]
     color_index = 0
     for _, key, value, timestamp in data_tuples:
-        # print(key, value, timestamp)
         if key not in data_by_key:
             data_by_key[key] = {
                 "values": [],
@@ -126,6 +126,7 @@ def generate_graph_html(data_tuples, cheapest_site="unkown", lowest_price_today=
     )
     with open(filename, "w") as f:
         f.write(html_content)
+        logging.info(f"html file generated ({filename})")
 
 
 if __name__ == "__main__":

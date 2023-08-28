@@ -24,7 +24,7 @@ Functions:
 
     Note: Ensure the necessary dependencies are installed before using this module.
 """
-
+import logging
 import paramiko
 
 from .utils import get_secret, get_env
@@ -56,25 +56,22 @@ def upload_file_via_sftp(
     """
 
     if get_env("DRYRUN") is not None:
-        print(f"sftp upload of {local_file_path} skipped")
+        logging.info(f"sftp upload of {local_file_path} skipped")
         return
 
     host = get_secret(hostfile)
     username = get_secret(usernamefile)
     password = get_secret(passwordfile)
 
-    try:
-        transport = paramiko.Transport((host, 22))
-        transport.connect(username=username, password=password)
+    transport = paramiko.Transport((host, 22))
+    transport.connect(username=username, password=password)
 
-        sftp = paramiko.SFTPClient.from_transport(transport)
-        sftp.put(local_file_path, remote_file_path)
+    sftp = paramiko.SFTPClient.from_transport(transport)
+    sftp.put(local_file_path, remote_file_path)
 
-        sftp.close()
-        transport.close()
+    sftp.close()
+    transport.close()
 
-        print(
-            f"File '{local_file_path}' uploaded to '{remote_file_path}' successfully."
-        )
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    logging.info(
+        f"File '{local_file_path}' uploaded to '{host}/{remote_file_path}' successfully"
+    )

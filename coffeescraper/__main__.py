@@ -4,6 +4,8 @@
 #
 # coffeescraper is an experiment in webscraping both with and without Selenium
 
+import logging
+
 from .scraper import sites
 from .database import PriceDatabase
 from .spreadsheet import write_sheet
@@ -13,11 +15,19 @@ from .smtp import send_message
 from .utils import get_env, get_secret_file
 
 # TODO: improve the excel sheet (table headers)
-# TODO: do proper logging across all module
 
 if __name__ == "__main__":
+
+    loglevel = get_env("LOGLEVEL","WARNING")
+    numeric_level = getattr(logging, loglevel.upper(), None)
+    if not isinstance(numeric_level, int):
+        raise ValueError('Invalid log level: %s' % loglevel)
+    logging.basicConfig(level=numeric_level, format='%(levelname)s:%(module)s - %(asctime)s %(message)s')
+
     filename = "/tmp/coffeescraper.xlsx"
     filename_html = "/tmp/coffeescraper.html"
+
+    logging.info("coffeescraper started")
 
     db = PriceDatabase()
 
@@ -25,17 +35,14 @@ if __name__ == "__main__":
     cheapest_site = None
     for site in sites:
         result = site()
-        print(result)
         db.insert_tuple_into_table(*result)
         if result[1] < lowest_price_today:
             lowest_price_today = result[1]
             cheapest_site = result[0]
 
     write_sheet(db.get_prices(), filename=filename)
-    print(f"spreadsheet saved as {filename}")
 
     generate_graph_html(db.get_prices(), cheapest_site=cheapest_site, lowest_price_today=lowest_price_today, filename=filename_html)
-    print(f"html graph saved as {filename_html}")
 
     upload_file_via_sftp(
         hostfile="/run/secrets/sftp_host",
@@ -44,7 +51,6 @@ if __name__ == "__main__":
         local_file_path=filename,
         remote_file_path=get_env("EXCELREPORT","/coffeescraper.xlsx"),
     )
-    print(f"spreadsheet uploaded to coffeescraper.xlsx")
 
     upload_file_via_sftp(
         hostfile="/run/secrets/sftp_host",
@@ -53,17 +59,17 @@ if __name__ == "__main__":
         local_file_path=filename_html,
         remote_file_path=get_env("HTMLREPORT","/coffeescraper.html"),
     )
-    print(f"html graph uploaded to coffeescraper.html")
 
     limit = float(get_env("ALERTLIMIT",0.50))
-    if db.get_difference() <= -limit:
-        print("mailing an alert")
+    diff = db.get_difference()
+    if  diff <= -limit:
         send_message(
             get_env("ALERTSENDER"),
             get_env("ALERTRECIPIENTS"),
             get_env("ALERTSUBJECT","Coffee Alert"),
             get_secret_file("/run/secrets/smtp_message").format(limit=limit)
         )
-        print("mailing sent")
     else:
-        print("no mailing sent, limit not reached")
+        logging.info(f"no mailing sent, limit not reached {diff} > -{limit}")
+
+    logging.info("coffeescraper completed")

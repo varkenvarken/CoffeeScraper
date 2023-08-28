@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import logging
 from typing import Generator
 from datetime import datetime
 import psycopg2
@@ -49,6 +50,7 @@ class PriceDatabase:
             host=host,
             port=port,
         )
+        logging.info(f"database connection to {host}:{port}/{dbname} opened")
         self.table_created = False
     
     @staticmethod
@@ -83,6 +85,7 @@ class PriceDatabase:
             cursor.execute(create_table_query)
             self.connection.commit()
             self.table_created = True
+            logging.info(f"new table url_price created if it did not exist")
 
 
     def insert_tuple_into_table(self, url:str, price:float) -> None:
@@ -109,7 +112,7 @@ class PriceDatabase:
             """
             cursor.execute(insert_query, (url, price, timestamp))
             self.connection.commit()
-            print("Tuple inserted successfully!")
+            logging.debug(f"Tuple {url},{price} inserted successfully!")
 
 
     def get_prices(self) -> Generator[tuple[int,str,float,datetime],None,None]:

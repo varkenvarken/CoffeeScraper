@@ -37,6 +37,7 @@ services:
       - smtp_password
       - smtp_message
     environment:
+      - LOGLEVEL=INFO
       - EXCELREPORT=/coffeescraper.xlsx # this is the default name of the remote file
       - HTMLREPORT=/coffeescraper.html # this is the default name of the remote file
       - ALERTLIMIT=0.50 # this is the default limit
