@@ -80,7 +80,7 @@ class CoffeeScraper:
         Raises:
             PriceNotFoundException: If no price is found in the scraped content.
         """
-        response = requests.get(self.url, headers=self.headers)
+        response = requests.get(self.url, headers=self.headers, timeout=15.0)
         logging.debug(f"{self.url} {response.status_code}:{response.reason}")
         if match := re.search(self.pricepattern, response.text):
             price = float(self.format(match.group("price")))
@@ -148,7 +148,8 @@ class ChromiumCoffeeScraper(CoffeeScraper):
             options=self.options,
         )
 
-        # TODO: add some timeout handling here
+        driver.implicitly_wait(15);
+
         driver.get(self.url)
 
         try:

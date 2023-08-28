@@ -34,11 +34,14 @@ if __name__ == "__main__":
     lowest_price_today = 1000000.0
     cheapest_site = None
     for site in sites:
-        result = site()
-        db.insert_tuple_into_table(*result)
-        if result[1] < lowest_price_today:
-            lowest_price_today = result[1]
-            cheapest_site = result[0]
+        try:
+            result = site()
+            db.insert_tuple_into_table(*result)
+            if result[1] < lowest_price_today:
+                lowest_price_today = result[1]
+                cheapest_site = result[0]
+        except Exception as e:
+            logging.warning(f"error retrieving price from {site.url} {e}")
 
     write_sheet(db.get_prices(), filename=filename)
 
