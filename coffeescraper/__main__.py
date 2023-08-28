@@ -12,7 +12,6 @@ from .sftp import upload_file_via_sftp
 from .smtp import send_message
 from .utils import get_env, get_secret_file
 
-# TODO: improve the chart in the HTML output
 # TODO: improve the excel sheet (table headers)
 # TODO: do proper logging across all module
 # TODO: refactor database module into proper class
