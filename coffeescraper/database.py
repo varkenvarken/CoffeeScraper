@@ -32,7 +32,7 @@ class PriceDatabase:
 
     """
    
-    def __init__(self, host:str="db", port:str="5432", username:str="postgres", password:str|None="postgres", dbname:str="postgres"):
+    def __init__(self, host:str="db", port:str="5432", username:str="postgres", password:str|None=None, dbname:str="postgres"):
         """
         Initialize a PriceDatabase instance with the given database connection parameters.
 
