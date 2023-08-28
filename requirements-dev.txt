@@ -1,0 +1,8 @@
+requests
+selenium
+psycopg2
+openpyxl
+paramiko
+jinja2
+pytest==7.4.0
+pytest-cov==4.1.0

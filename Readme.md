@@ -2,6 +2,8 @@
 
 A simple experiment in webscraping both with and without Selenium.
 
+![Coverage](docs/images/coverage.svg)
+
 ## Description
 
 The focus is on getting current price information from some websites for a particular

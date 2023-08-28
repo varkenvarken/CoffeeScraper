@@ -1,6 +1,15 @@
 {
-    "cSpell.enabled": false,
+    "cSpell.enabled": true,
     "cSpell.enableFiletypes": [
         "markdown"
-    ]
+    ],
+    "python.testing.pytestArgs": [
+        "test",
+        "--cov=${workspaceFolder}/coffeescraper",
+        "--cov-report=html",
+        "--cov-report=json",
+        //"--pdb"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }
