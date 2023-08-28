@@ -5,7 +5,7 @@
 # coffeescraper is an experiment in webscraping both with and without Selenium
 
 from .scraper import sites
-from .database import insert_tuple_into_table, get_prices, get_difference
+from .database import PriceDatabase
 from .spreadsheet import write_sheet
 from .html import generate_graph_html
 from .sftp import upload_file_via_sftp
@@ -14,26 +14,27 @@ from .utils import get_env, get_secret_file
 
 # TODO: improve the excel sheet (table headers)
 # TODO: do proper logging across all module
-# TODO: refactor database module into proper class
 
 if __name__ == "__main__":
     filename = "/tmp/coffeescraper.xlsx"
     filename_html = "/tmp/coffeescraper.html"
+
+    db = PriceDatabase()
 
     lowest_price_today = 1000000.0
     cheapest_site = None
     for site in sites:
         result = site()
         print(result)
-        insert_tuple_into_table(*result)
+        db.insert_tuple_into_table(*result)
         if result[1] < lowest_price_today:
             lowest_price_today = result[1]
             cheapest_site = result[0]
 
-    write_sheet(get_prices(), filename=filename)
+    write_sheet(db.get_prices(), filename=filename)
     print(f"spreadsheet saved as {filename}")
 
-    generate_graph_html(get_prices(), cheapest_site=cheapest_site, lowest_price_today=lowest_price_today, filename=filename_html)
+    generate_graph_html(db.get_prices(), cheapest_site=cheapest_site, lowest_price_today=lowest_price_today, filename=filename_html)
     print(f"html graph saved as {filename_html}")
 
     upload_file_via_sftp(
@@ -55,7 +56,7 @@ if __name__ == "__main__":
     print(f"html graph uploaded to coffeescraper.html")
 
     limit = float(get_env("ALERTLIMIT",0.50))
-    if get_difference() <= -limit:
+    if db.get_difference() <= -limit:
         print("mailing an alert")
         send_message(
             get_env("ALERTSENDER"),
