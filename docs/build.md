@@ -34,7 +34,8 @@ cronjobs:
 15 6 * * * docker container prune --filter until=3d -f
 ```
 
-This will run the app at 5 past 6 in the morning, bring down the database 5 minutes later
+This will run the app at 5 past 6 in the morning (the app, and therefore the container,
+exits after scraping the configured sites once), bring down the database 5 minutes later
 (the data is persisted on a volume), and again 5 minutes later all stopped containers are
 removed that are older than three days (so we don't keep on storing stopped containers
-endlessly but could still inspect the logging for a few days if something went wrong)
+endlessly,\ but could still inspect the logging for a few days if something went wrong)
