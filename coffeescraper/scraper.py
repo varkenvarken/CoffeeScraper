@@ -154,7 +154,7 @@ class ChromiumCoffeeScraper(CoffeeScraper):
 
         try:
             price = driver.find_element(self.pricepattern.by, self.pricepattern.value)
-            formattedprice = self.format(price.text)
+            formattedprice = float(self.format(price.text))
             price = self.url, formattedprice
             logging.info(f"price from {self.url} = {formattedprice}")
         except:
