@@ -4,7 +4,7 @@ A simple experiment in webscraping both with and without Selenium.
 
 ## Description
 
-The focus in getting current price information from some websites for a particular
+The focus is on getting current price information from some websites for a particular
 brand of coffee I drink a lot.
 
 Some of those websites are very straight forword to parse and even provide meta tags
@@ -12,8 +12,9 @@ that can be directly used to extract the price information, others are slightly 
 complicated and have euros and cents in different elements.
 
 But that is all pretty simple, however, some sites actively block scraping robots,
-by looking at the User-Agent string or provide empty skeleton pages that are completely
-build up using javascript, and that poses an issue, because downloading the HTML is no
+by looking at the User-Agent string, or provide empty skeleton pages that are completely
+build up using javascript. Changing a User-Agent string is straight-forward,
+but those dynamic pages are an issue, because downloading the HTML is no
 longer sufficient.
 
 Fortunately this can be solved with [Selenium](https://www.selenium.dev/), a framework
@@ -30,6 +31,8 @@ graph LR
     end
     Docker --> B([Websites on the internet])
 ```
+We have a separate container with a Postgres database to store the results of our scraping,
+and a container that runs our app.
 
 ## Additional functionality
 
@@ -46,5 +49,7 @@ some additional functionality is provided:
 The code isn't very robust and not very well tested. It is not production code but meant as a personal experiment. 
 
 ## Build and deploy
+
+The idea is to run the container with the app once a day, using a cronjob on the machine that hosts my docker service.
 
 See [docs/build.md](docs/build.md)
