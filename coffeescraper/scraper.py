@@ -83,8 +83,12 @@ class CoffeeScraper:
         response = requests.get(self.url, headers=self.headers, timeout=15.0)
         logging.debug(f"{self.url} {response.status_code}:{response.reason}")
         if match := re.search(self.pricepattern, response.text):
-            price = float(self.format(match.group("price")))
-            logging.info(f"price from {self.url} = {price}")
+            try:
+                price = match.group("price")
+                price = float(self.format(price))
+                logging.info(f"price from {self.url} = {price}")
+            except ValueError:
+                raise PriceNotFoundException(f"could not convert {price} to float in {self.url}")
             return self.url, price
         raise PriceNotFoundException(f"No price found in {self.url}")
 
@@ -158,8 +162,8 @@ class ChromiumCoffeeScraper(CoffeeScraper):
             price = self.url, formattedprice
             logging.info(f"price from {self.url} = {formattedprice}")
         except:
-            logging.warning(f"{self.url} no elemement with {self.pricepattern.by} = {self.pricepattern.value} found")
-            price = None
+            logging.warning(f"{self.url} no element with {self.pricepattern.by} = {self.pricepattern.value} found")
+            raise PriceNotFoundException(f"{self.url} no element with {self.pricepattern.by} = {self.pricepattern.value} found")
 
         driver.close()
 
