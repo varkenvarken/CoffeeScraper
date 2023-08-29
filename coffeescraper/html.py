@@ -128,15 +128,3 @@ def generate_graph_html(data_tuples, cheapest_site="unkown", lowest_price_today=
         f.write(html_content)
         logging.info(f"html file generated ({filename})")
 
-
-if __name__ == "__main__":
-    # Test data
-    data = [
-        ("A", 10.2, datetime(2023, 8, 1)),
-        ("B", 15.5, datetime(2023, 8, 5)),
-        ("A", 8.7, datetime(2023, 8, 10)),
-        ("B", 12.1, datetime(2023, 8, 15)),
-        # Add more data tuples here
-    ]
-
-    generate_graph_html(data)
