@@ -6,7 +6,7 @@ from datetime import datetime
 import psycopg2
 
 def now():
-    return datetime.now()
+    return datetime.now() # pragma: no cover
 
 class PriceDatabase:
     """
@@ -70,7 +70,7 @@ class PriceDatabase:
         """
         try:
             with open("/run/secrets/postgres-password") as f:
-                return f.readline().strip()
+                return f.readline().strip() # pragma: no cover
         except FileNotFoundError:
             return "postgres"
 
@@ -152,21 +152,22 @@ class PriceDatabase:
         if not self.table_created: self.create_table()
 
         with self.connection.cursor() as cursor:
+            n = now()
             query = """
                 SELECT price FROM url_price
-                WHERE DATE(timestamp) = CURRENT_DATE
+                WHERE DATE(timestamp) = %s
                 ORDER BY price ASC
                 LIMIT 1;
             """
-            cursor.execute(query)
+            cursor.execute(query,(n,))
             min_today = cursor.fetchone()
             query = """
                 SELECT price FROM url_price
-                WHERE DATE(timestamp) = CURRENT_DATE - INTERVAL '1 day'
+                WHERE DATE(timestamp) = %s - INTERVAL '1 day'
                 ORDER BY price ASC
                 LIMIT 1;
             """
-            cursor.execute(query)
+            cursor.execute(query,(n,))
             min_yesterday = cursor.fetchone()
             if min_today is None or min_yesterday is None:
                 return 0.0

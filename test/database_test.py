@@ -19,8 +19,12 @@ class TestDatabase:
         db = PriceDatabase()
         assert db is not None
 
-    def test_insert_retrieve(self):
+    def test_insert_retrieve(self, mocker: MockerFixture):
         db = PriceDatabase()
+        clean_table(db.connection)
+
+        mocker.patch("coffeescraper.database.now", return_value=datetime(2011, 8, 8))
+
         db.insert_tuple_into_table("myurl", 100.0)
         seen = False
         for row in db.get_prices():
@@ -38,7 +42,19 @@ class TestDatabase:
         mocker.patch("coffeescraper.database.now", return_value=datetime(2011, 8, 8))
         db.insert_tuple_into_table("myurl", 100.0)
         mocker.patch("coffeescraper.database.now", return_value=datetime(2011, 8, 9))
+        db.insert_tuple_into_table("myurl", 90.0)
+        result = db.get_difference()
+        assert type(result) == float
+        assert result == -10.0
+
+    
+    def test_difference_missing(self, mocker: MockerFixture):
+        db = PriceDatabase()
+        clean_table(db.connection)
+
+        mocker.patch("coffeescraper.database.now", return_value=datetime(2011, 8, 8))
         db.insert_tuple_into_table("myurl", 100.0)
         result = db.get_difference()
         assert type(result) == float
         assert result == 0.0
+
