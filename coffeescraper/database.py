@@ -5,6 +5,9 @@ from typing import Generator
 from datetime import datetime
 import psycopg2
 
+def now():
+    return datetime.now()
+
 class PriceDatabase:
     """
     A class for managing a PostgreSQL database of coffee prices.
@@ -105,7 +108,7 @@ class PriceDatabase:
         if not self.table_created: self.create_table()
 
         with self.connection.cursor() as cursor:
-            timestamp = datetime.now()
+            timestamp = now()
             insert_query = """
                 INSERT INTO url_price (url, price, timestamp)
                 VALUES (%s, %s, %s);
