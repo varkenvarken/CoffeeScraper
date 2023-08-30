@@ -42,13 +42,22 @@ Besides scraping price information from websites and storing this in a database,
 some additional functionality is provided:
 
 - an Excel compatible spreadsheet is created with the help of [openpyxl](https://openpyxl.readthedocs.io)
-- an HTML page is created with the help of [jinja](https://jinja.palletsprojects.com) and [chart.js](https://www.chartjs.org/)
+- an HTML page is created with the help of [jinja](https://jinja.palletsprojects.com) and [chart.js](https://www.chartjs.org/) (you can see and [example here](coffeescraper.html))
 - an email is sent when the minimum price today is lower by a configurable amount than the minimum price yesterday
 - the list of recipients can also be configured
 
 ## Caveats
 
-The code isn't very robust and not very well tested. It is not production code but meant as a personal experiment. 
+The code isn't very robust and not very well tested: The test coverage might not be too bad,
+but many of the unit tests just make sure that all code runs and that the appropriate
+exceptions are generated, but do not test the desired outcomes very thoroughly.
+This is the opposite of how a lot of people start with unit tests, but I feel that guarding
+against bad situations is more important than focus on the desired results, as those are
+in general easier to fix.
+
+```NOTE
+This is not production code!
+``` 
 
 ## Build and deploy
 
