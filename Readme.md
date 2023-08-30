@@ -2,7 +2,7 @@
 
 A simple experiment in webscraping both with and without Selenium.
 
-![Coverage](docs/images/coverage.svg)
+![Coverage](docs/images/test.svg) ![Coverage](docs/images/coverage.svg)
 
 ## Description
 

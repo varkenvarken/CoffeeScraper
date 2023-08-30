@@ -8,6 +8,7 @@
         "--cov=${workspaceFolder}/coffeescraper",
         "--cov-report=html",
         "--cov-report=json",
+        "--junit-xml=${workspaceFolder}/test/test.xml",
         //"--pdb"
     ],
     "python.testing.unittestEnabled": false,

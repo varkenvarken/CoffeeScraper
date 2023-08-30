@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "coverage badge",
+            "label": "Coverage badge",
             "type": "shell",
             "command": "python3 tools/coverage_badge.py coverage.json > docs/images/coverage.svg",
             "problemMatcher": [],
@@ -12,6 +12,24 @@
             "options": {
                 "cwd": "${workspaceFolder}"
             }
+        },
+        {
+            "label": "Test badge",
+            "type": "shell",
+            "command": "python3 tools/test_badge.py test/test.xml > docs/images/test.svg",
+            "problemMatcher": [],
+            "promptOnClose": false,
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Badges",
+            "dependsOn": [
+                "Test badge",
+                "Coverage badge"
+            ],
+            "problemMatcher": []
         }
     ]
 }

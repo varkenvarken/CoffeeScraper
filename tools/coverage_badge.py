@@ -21,7 +21,19 @@ with open(argv[1]) as f:
 
 coverage = int(info["totals"]["percent_covered_display"])
 
-url = f"http://192.168.4.6:8882/badge/coverage-{coverage}-green"
+color = "red"
+if coverage > 20:
+    color = "orange"
+if coverage > 40:
+    color = "yellow"
+if coverage > 60:
+    color = "yellowgreen"
+if coverage > 80:
+    color = "lawngreen"
+if coverage > 95:
+    color = "green"
+
+url = f"http://192.168.4.6:8882/badge/coverage-{coverage}%-{color}"
 
 try:
     content = get_page(url)
