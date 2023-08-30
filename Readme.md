@@ -9,7 +9,7 @@ A simple experiment in webscraping both with and without Selenium.
 The focus is on getting current price information from some websites for a particular
 brand of coffee I drink a lot.
 
-Some of those websites are very straight forword to parse and even provide meta tags
+Some of those websites are very straight forward to parse and even provide meta tags
 that can be directly used to extract the price information, others are slightly more
 complicated and have euros and cents in different elements.
 
@@ -20,7 +20,7 @@ but those dynamic pages are an issue, because downloading the HTML is no
 longer sufficient.
 
 Fortunately this can be solved with [Selenium](https://www.selenium.dev/), a framework
-that cann be used to automate interaction with a full web browser.
+that can be used to automate interaction with a full web browser.
 
 In our case we use Chromium on a Debian based Docker image. The high level setup looks
 something like this:

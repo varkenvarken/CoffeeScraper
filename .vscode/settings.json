@@ -5,6 +5,7 @@
     ],
     "python.testing.pytestArgs": [
         "test",
+        "--cov-config=${workspaceFolder}/.coveragerc",
         "--cov=${workspaceFolder}/coffeescraper",
         "--cov-report=html",
         "--cov-report=json",

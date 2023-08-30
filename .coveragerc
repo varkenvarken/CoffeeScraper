@@ -1,0 +1,3 @@
+[run]
+omit = coffeescraper/__main__.py
+    
