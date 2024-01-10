@@ -8,8 +8,11 @@ ENV PYTHONUNBUFFERED 1
 #    && rm -rf /tmp/pip-tmp
 
 #[Optional] Uncomment this section to install additional OS packages.
+# Note we do not install chromium-driver that is done by selenium on demand
+# and we also remove the one installed by the chromium package
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends chromium chromium-driver
+    && apt-get -y install --no-install-recommends chromium \
+    && rm /usr/bin/chromedriver
 
 # RUN export CHROMEVER=$(chromium --product-version | awk "{print $2}") && \
 #     wget -q --continue -P /tmp "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROMEVER/linux64/chromedriver-linux64.zip" && \

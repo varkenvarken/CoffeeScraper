@@ -14,6 +14,7 @@ from selenium.webdriver.common.by import By
 class PriceNotFoundException(Exception):
     pass
 
+
 # a PricePattern tuple should be passed as an argument to a
 # ChromiumCoffeeScraper constructor.
 # It is used to locate the element inside a page that contains
@@ -35,7 +36,7 @@ class CoffeeScraper:
 
     Attributes:
         headers (dict): Default User-Agent headers for the HTTP request.
-        
+
     Args:
         url (str): The URL from which to scrape the coffee-related information.
         pricepattern (str): A regular expression pattern used to extract the coffee price.
@@ -44,12 +45,12 @@ class CoffeeScraper:
     Methods:
         __init__(self, url: str, pricepattern: str, format=lambda x: x) -> None:
             Initializes a CoffeeScraper instance with the provided URL, price pattern, and format function.
-        
+
         __call__(self) -> Tuple[str, float] | None:
             Calls the instance and performs the scraping. Returns a tuple containing the URL and the extracted
             coffee price if successful, or raises PriceNotFoundException if no price is found.
     """
-        
+
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
     }
@@ -57,7 +58,7 @@ class CoffeeScraper:
     def __init__(self, url: str, pricepattern: str, format=lambda x: x) -> None:
         """
         Initialize a CoffeeScraper instance.
-        
+
         Args:
             url (str): The URL from which to scrape the coffee-related information.
             pricepattern (str): A regular expression pattern used to extract the coffee price.
@@ -72,11 +73,11 @@ class CoffeeScraper:
     def __call__(self) -> Tuple[str, float] | None:
         """
         Perform the scraping and extraction of coffee-related information.
-        
+
         Returns:
             Tuple[str, float] | None: A tuple containing the URL and the extracted coffee price if successful.
                                       Returns None if no price is found.
-        
+
         Raises:
             PriceNotFoundException: If no price is found in the scraped content.
         """
@@ -88,7 +89,9 @@ class CoffeeScraper:
                 price = float(self.format(price))
                 logging.info(f"price from {self.url} = {price}")
             except ValueError:
-                raise PriceNotFoundException(f"could not convert {price} to float in {self.url}")
+                raise PriceNotFoundException(
+                    f"could not convert {price} to float in {self.url}"
+                )
             return self.url, price
         raise PriceNotFoundException(f"No price found in {self.url}")
 
@@ -96,7 +99,7 @@ class CoffeeScraper:
 class ChromiumCoffeeScraper(CoffeeScraper):
     """
     A derived class for scraping coffee-related information from a given URL using Chromium WebDriver.
-    
+
     This class inherits from CoffeeScraper and extends its functionality by utilizing the Chromium WebDriver
     to perform the scraping. It sends an HTTP GET request to the given URL using the headless Chromium browser,
     then attempts to locate and extract the coffee price from the loaded page.
@@ -115,19 +118,19 @@ class ChromiumCoffeeScraper(CoffeeScraper):
             Returns a tuple containing the URL and the extracted coffee price if successful,
             or None if no price is found.
     """
-        
+
     def __init__(
         self, url: str, pricepattern: PricePattern, format=lambda x: x
     ) -> None:
         """
         Initialize a ChromiumCoffeeScraper instance.
-        
+
         Args:
             url (str): The URL from which to scrape the coffee-related information.
             pricepattern (PricePattern): A PricePattern object used to extract the coffee price.
             format (function, optional): A function to format the extracted price (default is identity function).
         """
-        
+
         super().__init__(url, None, format)
         self.pricepattern = pricepattern
         self.options = Options()
@@ -139,7 +142,7 @@ class ChromiumCoffeeScraper(CoffeeScraper):
     def __call__(self) -> Tuple[str, float] | None:
         """
         Perform the scraping and extraction of coffee-related information using Chromium WebDriver.
-        
+
         Returns:
             Tuple[str, float] | None: A tuple containing the URL and the extracted coffee price if successful.
                                      Returns None if no price is found.
@@ -152,7 +155,7 @@ class ChromiumCoffeeScraper(CoffeeScraper):
             options=self.options,
         )
 
-        driver.implicitly_wait(15);
+        driver.implicitly_wait(15)
 
         driver.get(self.url)
 
@@ -162,8 +165,12 @@ class ChromiumCoffeeScraper(CoffeeScraper):
             price = self.url, formattedprice
             logging.info(f"price from {self.url} = {formattedprice}")
         except:
-            logging.warning(f"{self.url} no element with {self.pricepattern.by} = {self.pricepattern.value} found")
-            raise PriceNotFoundException(f"{self.url} no element with {self.pricepattern.by} = {self.pricepattern.value} found")
+            logging.warning(
+                f"{self.url} no element with {self.pricepattern.by} = {self.pricepattern.value} found"
+            )
+            raise PriceNotFoundException(
+                f"{self.url} no element with {self.pricepattern.by} = {self.pricepattern.value} found"
+            )
 
         driver.close()
 
@@ -185,7 +192,8 @@ coffeepoddeals = CoffeeScraper(
 
 deprijshamer = CoffeeScraper(
     url="https://www.deprijshamer.nl/koffie/cups/dolce-gusto-lungo-xl",
-    pricepattern=r"'value':\s+(?P<price>\d+\.\d+),",
+    pricepattern=r'<div class="productprice-label labellarge">\s*<span class="symbol">€&nbsp;</span>(?P<price>\d+,<span class="cents">\d+)</span>\s*</div>',
+    format=lambda x: float(x.replace(',<span class="cents">', "")) / 100,
 )
 
 
